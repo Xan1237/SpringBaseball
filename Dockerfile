@@ -1,17 +1,17 @@
 # Stage 1: Build Angular App
-FROM node:18 AS frontend-build
+FROM node:18 AS Frontend-build
 WORKDIR /app
-COPY frontend/package.json frontend/package-lock.json ./
+COPY Frontend/package.json Frontend/package-lock.json ./
 RUN npm install
-COPY frontend/ .
+COPY Frontend/ .
 RUN npm run build --prod
 
 # Stage 2: Build Spring Boot Application
-FROM maven:3.9-eclipse-temurin-17 AS backend-build
+FROM maven:3.9-eclipse-temurin-17 AS Backend-build
 WORKDIR /app
-COPY backend/pom.xml .
+COPY Backend/pom.xml .
 RUN mvn dependency:go-offline
-COPY backend/ .
+COPY Backend/ .
 RUN mvn clean package -DskipTests
 
 # Stage 3: Create Final Image
@@ -19,10 +19,10 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copy Spring Boot JAR
-COPY --from=backend-build /app/target/*.jar app.jar
+COPY --from=Backend-build /app/target/*.jar app.jar
 
 # Copy Angular build
-COPY --from=frontend-build /app/dist/frontend /static
+COPY --from=Frontend-build /app/dist/Frontend /static
 
 # Expose the port for Spring Boot
 EXPOSE 8080
