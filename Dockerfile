@@ -1,6 +1,6 @@
 # Stage 1: Build Angular App
 FROM node:18 AS Frontend-build
-WORKDIR /app
+WORKDIR /app/Frontend
 COPY Frontend/package.json Frontend/package-lock.json ./
 RUN npm install
 COPY Frontend/ .
@@ -8,7 +8,7 @@ RUN npm run build --prod
 
 # Stage 2: Build Spring Boot Application
 FROM maven:3.9-eclipse-temurin-23 AS Backend-build
-WORKDIR /app
+WORKDIR /app/Backend
 COPY Backend/pom.xml .
 RUN mvn dependency:go-offline
 COPY Backend/ .
