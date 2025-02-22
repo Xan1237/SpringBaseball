@@ -7,7 +7,7 @@ COPY Frontend/ .
 RUN npm run build --prod
 
 # Stage 2: Build Spring Boot Application
-FROM maven:3.9-eclipse-temurin-17 AS Backend-build
+FROM maven:3.9-eclipse-temurin-23 AS Backend-build
 WORKDIR /app
 COPY Backend/pom.xml .
 RUN mvn dependency:go-offline
@@ -15,7 +15,7 @@ COPY Backend/ .
 RUN mvn clean package -DskipTests
 
 # Stage 3: Create Final Image
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:23-jdk
 WORKDIR /app
 
 # Copy Spring Boot JAR
